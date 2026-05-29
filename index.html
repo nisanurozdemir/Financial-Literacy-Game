@@ -3,75 +3,213 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FinLitSim - Finansal Okuryazarlık Simülasyonu</title>
+    <title>FinLitSim - Profesyonel Finansal Simülasyon</title>
     <style>
-        body { font-family: sans-serif; background-color: #f4f7f6; color: #333; margin: 0; padding: 20px; display: flex; justify-content: center; }
-        .container { max-width: 600px; width: 100%; background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
-        h1 { color: #2c3e50; text-align: center; margin-bottom: 5px; }
-        .subtitle { text-align: center; color: #7f8c8d; font-size: 0.9em; margin-bottom: 25px; }
-        .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px; background: #f8f9fa; padding: 15px; border-radius: 8px; }
-        .stat-box { font-weight: bold; }
-        .stat-val { color: #2980b9; }
-        .market-news { background: #fff3cd; border-left: 5px solid #ffc107; padding: 12px; margin-bottom: 20px; border-radius: 4px; font-size: 0.95em; }
-        .input-group { margin-bottom: 15px; }
-        label { display: block; margin-bottom: 5px; font-weight: 600; font-size: 0.9em; }
-        input { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; }
-        button { width: 100%; padding: 12px; background-color: #2ecc71; color: white; border: none; border-radius: 6px; font-size: 1em; font-weight: bold; cursor: pointer; }
-        button:hover { background-color: #27ae60; }
-        .log-area { margin-top: 20px; background: #2c3e50; color: #ecf0f1; padding: 15px; border-radius: 8px; height: 120px; overflow-y: auto; font-family: monospace; font-size: 0.9em; }
+        :root {
+            --bg-color: #0f172a;
+            --card-bg: #1e293b;
+            --text-color: #f8fafc;
+            --text-muted: #94a3b8;
+            --accent-green: #10b981;
+            --accent-blue: #3b82f6;
+            --accent-gold: #f59e0b;
+            --accent-silver: #94a3b8;
+            --border-color: #334155;
+        }
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            background-color: var(--bg-color); 
+            color: var(--text-color); 
+            margin: 0; 
+            padding: 20px; 
+            display: flex; 
+            justify-content: center; 
+        }
+        .container { 
+            max-width: 700px; 
+            width: 100%; 
+            background: var(--card-bg); 
+            padding: 30px; 
+            border-radius: 16px; 
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+            border: 1px solid var(--border-color);
+        }
+        h1 { color: var(--text-color); text-align: center; margin-bottom: 5px; font-weight: 700; }
+        .subtitle { text-align: center; color: var(--text-muted); font-size: 0.95em; margin-bottom: 25px; }
+        
+        /* Kurulum Bölümü */
+        .setup-section {
+            background: rgba(15, 23, 42, 0.6);
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border: 1px dashed var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 15px;
+        }
+        .setup-section label { font-weight: bold; font-size: 0.9em; color: var(--accent-blue); }
+        .setup-section input { width: 130px; padding: 8px; background: #0f172a; border: 1px solid var(--border-color); color: white; border-radius: 6px; text-align: center; font-size: 1em; font-weight: bold; }
+        .setup-section button { width: auto; padding: 8px 15px; background: var(--accent-blue); font-size: 0.9em; }
+
+        /* İstatistik Paneli */
+        .stats-grid { 
+            display: grid; 
+            grid-template-columns: 1fr 1fr; 
+            gap: 15px; 
+            margin-bottom: 20px; 
+            background: #0f172a; 
+            padding: 20px; 
+            border-radius: 12px; 
+            border: 1px solid var(--border-color);
+        }
+        .stat-box { font-size: 0.95em; color: var(--text-muted); display: flex; justify-content: space-between; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 5px; }
+        .stat-val { color: var(--text-color); font-weight: 600; }
+        .stat-total { grid-column: span 2; border-bottom: none; padding-top: 10px; font-size: 1.2em; font-weight: bold;}
+        
+        .market-news { background: rgba(245, 158, 11, 0.1); border-left: 4px solid var(--accent-gold); padding: 15px; margin-bottom: 20px; border-radius: 6px; font-size: 0.95em; color: #fef08a; }
+        
+        /* Yatırım Girişleri */
+        .investment-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px; }
+        .input-group { background: rgba(15, 23, 42, 0.4); padding: 10px; border-radius: 8px; border: 1px solid var(--border-color); }
+        label { display: block; margin-bottom: 5px; font-weight: 600; font-size: 0.85em; color: var(--text-muted); }
+        input[type="number"] { width: 100%; padding: 10px; background: #0f172a; border: 1px solid var(--border-color); border-radius: 6px; box-sizing: border-box; color: white; font-size: 1em; }
+        input:focus { border-color: var(--accent-blue); outline: none; }
+        
+        button { width: 100%; padding: 14px; background-color: var(--accent-green); color: white; border: none; border-radius: 8px; font-size: 1.05em; font-weight: bold; cursor: pointer; transition: background 0.2s; }
+        button:hover { filter: brightness(1.1); }
+        
+        .log-area { margin-top: 20px; background: #0f172a; color: #38bdf8; padding: 15px; border-radius: 8px; height: 140px; overflow-y: auto; font-family: monospace; font-size: 0.85em; border: 1px solid var(--border-color); }
     </style>
 </head>
 <body>
 <div class="container">
-    <h1>📊 FinLitSim</h1>
-    <div class="subtitle">Finansal Okuryazarlık ve Portföy Yönetimi Simülasyonu</div>
+    <h1>📊 FinLitSim Pro</h1>
+    <div class="subtitle">Profesyonel Portföy ve Risk Yönetimi Simülasyonu</div>
+    
+    <div class="setup-section" id="setup-panel">
+        <label>💵 Başlangıç Bütçeni Belirle:</label>
+        <input type="number" id="txt-baslangic" value="10000" min="1000">
+        <button onclick="butceyiGuncelle()">Bütçeyi Uygula</button>
+    </div>
+
     <div class="stats-grid">
-        <div class="stat-box">Yıl: <span id="lbl-yil" class="stat-val">1/5</span></div>
-        <div class="stat-box">Enflasyon: <span id="lbl-enflasyon" class="stat-val">%15</span></div>
-        <div class="stat-box">Nakit: <span id="lbl-nakit" class="stat-val">10000 TL</span></div>
+        <div class="stat-box">Dönem: <span id="lbl-ay" class="stat-val">Ay 1 / 12</span></div>
+        <div class="stat-box">Aylık Enflasyon: <span id="lbl-enflasyon" class="stat-val">%1.5</span></div>
+        <div class="stat-box">Nakit (TL): <span id="lbl-nakit" class="stat-val">10000 TL</span></div>
         <div class="stat-box">Hisse Senedi: <span id="lbl-hisse" class="stat-val">0 TL</span></div>
         <div class="stat-box">Altın: <span id="lbl-altin" class="stat-val">0 TL</span></div>
-        <div class="stat-box">Toplam Portföy: <span id="lbl-toplam" class="stat-val" style="color:#27ae60;">10000 TL</span></div>
+        <div class="stat-box">Gümüş: <span id="lbl-gumus" class="stat-val">0 TL</span></div>
+        <div class="stat-box">Dolar (USD): <span id="lbl-dolar" class="stat-val">0 TL</span></div>
+        <div class="stat-box stat-total">Toplam Portföy Değeri: <span id="lbl-toplam" style="color: var(--accent-green);">10000 TL</span></div>
     </div>
-    <div id="market-news" class="market-news">📰 <b>Piyasa Raporu:</b> Paranı enflasyona karşı korumak için yatırımlarını dağıt!</div>
+    
+    <div id="market-news" class="market-news">📰 <b>Makroekonomik Özet:</b> Portföyünüzü optimize etmek ve paranızın satın alma gücünü korumak için varlıklarınızı çeşitlendirin.</div>
+    
     <div id="game-controls">
-        <div class="input-group"><label>Hisse Senedine Yatırılacak Miktar (TL):</label><input type="number" id="txt-hisse" value="0"></div>
-        <div class="input-group"><label>Altına Yatırılacak Miktar (TL):</label><input type="number" id="txt-altin" value="0"></div>
-        <button onclick="turuIlerlet()">Yılı Tamamla ve Yatırım Yap</button>
+        <div class="investment-grid">
+            <div class="input-group"><label style="color: var(--accent-blue);">📈 Hisse Senedi (TL):</label><input type="number" id="txt-hisse" value="0" min="0"></div>
+            <div class="input-group"><label style="color: var(--accent-gold);">🪙 Altın (TL):</label><input type="number" id="txt-altin" value="0" min="0"></div>
+            <div class="input-group"><label style="color: var(--accent-silver);">🥈 Gümüş (TL):</label><input type="number" id="txt-gumus" value="0" min="0"></div>
+            <div class="input-group"><label style="color: #22c55e;">💵 Dolar / USD (TL):</label><input type="number" id="txt-dolar" value="0" min="0"></div>
+        </div>
+        <button onclick="ayiIlerlet()">Ayı Tamamla ve Yatırımları İşle</button>
     </div>
-    <div class="log-area" id="log-area">[Sistem] Simülasyon başlatıldı. Başarılar!</div>
+    
+    <div class="log-area" id="log-area">[Sistem] Simülasyon modülü aktif edildi. Başlangıç bütçenizi düzenleyebilir veya direkt başlayabilirsiniz.</div>
 </div>
+
 <script>
-    let oyun = { tur: 1, toplamTur: 5, nakit: 10000.0, hisse: 0.0, altin: 0.0, enflasyon: 0.15 };
-    function logEkle(m) { let l = document.getElementById("log-area"); l.innerHTML += "<br>" + m; l.scrollTop = l.scrollHeight; }
-    function ekranıGuncelle() {
-        document.getElementById("lbl-yil").innerText = `${oyun.tur}/5`;
+    let oyun = { ay: 1, toplamAy: 12, nakit: 10000.0, hisse: 0.0, altin: 0.0, gumus: 0.0, dolar: 0.0, enflasyon: 0.015 };
+    
+    function logEkle(m) { 
+        let l = document.getElementById("log-area"); 
+        l.innerHTML += "<br>" + m; 
+        l.scrollTop = l.scrollHeight; 
+    }
+    
+    function butceyiGuncelle() {
+        if(oyun.ay > 1) return;
+        let yeniMiktar = parseFloat(document.getElementById("txt-baslangic").value) || 10000;
+        if(yeniMiktar < 1000) { alert("Lütfen en az 1000 TL giriniz."); return; }
+        oyun.nakit = yeniMiktar;
+        ekraniGuncelle();
+        logEkle(`[Sistem] Başlangıç portföyü ${yeniMiktar.toFixed(2)} TL olarak güncellendi.`);
+    }
+
+    function ekraniGuncelle() {
+        document.getElementById("lbl-ay").innerText = `Ay ${oyun.ay} / 12`;
         document.getElementById("lbl-enflasyon").innerText = `%${(oyun.enflasyon * 100).toFixed(1)}`;
         document.getElementById("lbl-nakit").innerText = `${oyun.nakit.toFixed(2)} TL`;
         document.getElementById("lbl-hisse").innerText = `${oyun.hisse.toFixed(2)} TL`;
         document.getElementById("lbl-altin").innerText = `${oyun.altin.toFixed(2)} TL`;
-        document.getElementById("lbl-toplam").innerText = `${(oyun.nakit + oyun.hisse + oyun.altin).toFixed(2)} TL`;
+        document.getElementById("lbl-gumus").innerText = `${oyun.gumus.toFixed(2)} TL`;
+        document.getElementById("lbl-dolar").innerText = `${oyun.dolar.toFixed(2)} TL`;
+        
+        let toplam = oyun.nakit + oyun.hisse + oyun.altin + oyun.gumus + oyun.dolar;
+        document.getElementById("lbl-toplam").innerText = `${toplam.toFixed(2)} TL`;
     }
-    function turuIlerlet() {
+
+    function ayiIlerlet() {
+        // İlk tur ilerlediğinde bütçe düzenlemeyi kapat
+        document.getElementById("setup-panel").style.opacity = "0.5";
+        document.getElementById("txt-baslangic").disabled = true;
+
         let h = parseFloat(document.getElementById("txt-hisse").value) || 0;
         let a = parseFloat(document.getElementById("txt-altin").value) || 0;
-        if (h + a > oyun.nakit) { alert("❌ Yetersiz nakit!"); return; }
-        oyun.nakit -= (h + a); oyun.hisse += h; oyun.altin += a;
-        let e = oyun.nakit * oyun.enflasyon; oyun.nakit -= e;
-        logEkle(`⚠️ Enflasyon nakitinizden ${e.toFixed(2)} TL eritti.`);
-        let s = [{ad:"Ekonomik Büyüme",h:0.25,a:-0.05,e:-0.02},{ad:"Küresel Kriz",h:-0.30,a:0.20,e:0.05},{ad:"Stabil Piyasa",h:0.08,a:0.05,e:0.01}];
-        let sec = s[Math.floor(Math.random() * s.length)];
-        document.getElementById("market-news").innerHTML = `📰 <b>Gelişme:</b> ${sec.ad} yaşanıyor!`;
-        if (oyun.hisse > 0) { let d = oyun.hisse * sec.h; oyun.hisse += d; logEkle(`📈 Hisse: ${d>=0?'+':''}${d.toFixed(2)} TL`); }
-        if (oyun.altin > 0) { let d = oyun.altin * sec.a; oyun.altin += d; logEkle(`👑 Altın: ${d>=0?'+':''}${d.toFixed(2)} TL`); }
-        oyun.enflasyon = Math.max(0.05, oyun.enflasyon + sec.e); oyun.tur++;
-        if (oyun.tur > oyun.toplamTur) {
-            ekranıGuncelle();
-            let tot = oyun.nakit + oyun.hisse + oyun.altin;
-            document.getElementById("game-controls").innerHTML = `<h3>Oyun Bitti!</h3><p>Final Portföy: <b>${tot.toFixed(2)} TL</b></p>`;
+        let g = parseFloat(document.getElementById("txt-gumus").value) || 0;
+        let d = parseFloat(document.getElementById("txt-dolar").value) || 0;
+        
+        if (h + a + g + d > oyun.nakit) { alert("❌ Yetersiz nakit bütçesi!"); return; }
+        
+        // Parayı ilgili varlıklara dağıt
+        oyun.nakit -= (h + a + g + d); 
+        oyun.hisse += h; 
+        oyun.altin += a;
+        oyun.gumus += g;
+        oyun.dolar += d;
+        
+        // Aylık enflasyon erimesi (Sadece nakit parayı etkiler)
+        let erime = oyun.nakit * oyun.enflasyon; 
+        oyun.nakit -= erime;
+        logEkle(`📉 Enflasyon: Nakit paranızdan ${erime.toFixed(2)} TL eritti.`);
+        
+        // Rastgele Piyasa Senaryoları
+        let senaryolar = [
+            {ad:"Küresel Teşvik Paketi Açıklandı", h:0.12, a:0.04, g:0.06, d:-0.02, e:0.005},
+            {ad:"Faiz Artırım Kararı Geldi", h:-0.08, a:-0.03, g:-0.04, d:0.03, e:-0.002},
+            {ad:"Jeopolitik Gerilim Tırmandı", h:-0.15, a:0.12, g:0.08, d:0.04, e:0.008},
+            {ad:"Emtia Rallisi Başladı", h:0.02, a:0.08, g:0.15, d:0.01, e:0.003},
+            {ad:"Dengeli ve Sakin Piyasa", h:0.04, a:0.01, g:0.02, d:0.005, e:0.001}
+        ];
+        
+        let secilen = senaryolar[Math.floor(Math.random() * senaryolar.length)];
+        document.getElementById("market-news").innerHTML = `📰 <b>Piyasa Gelişmesi:</b> ${secilen.ad}!`;
+        
+        // Değer değişimlerini uygula ve logla
+        if (oyun.hisse > 0) { let kar = oyun.hisse * secilen.h; oyun.hisse += kar; logEkle(`📊 Hisse: ${kar>=0?'+':''}${kar.toFixed(2)} TL`); }
+        if (oyun.altin > 0) { let kar = oyun.altin * secilen.a; oyun.altin += kar; logEkle(`🪙 Altın: ${kar>=0?'+':''}${kar.toFixed(2)} TL`); }
+        if (oyun.gumus > 0) { let kar = oyun.gumus * secilen.g; oyun.gumus += kar; logEkle(`🥈 Gümüş: ${kar>=0?'+':''}${kar.toFixed(2)} TL`); }
+        if (oyun.dolar > 0) { let kar = oyun.dolar * secilen.d; oyun.dolar += kar; logEkle(`💵 Dolar: ${kar>=0?'+':''}${kar.toFixed(2)} TL`); }
+        
+        oyun.enflasyon = Math.max(0.005, oyun.enflasyon + secilen.e); 
+        oyun.ay++;
+        
+        if (oyun.ay > oyun.toplamAy) {
+            ekraniGuncelle();
+            let finalPortfoy = oyun.nakit + oyun.hisse + oyun.altin + oyun.gumus + oyun.dolar;
+            document.getElementById("game-controls").innerHTML = `<h3 style="color:var(--accent-gold); text-align:center;">🏆 Simülasyon Tamamlandı!</h3><p style="text-align:center; font-size:1.1em;">12 Ay Sonundaki Toplam Portföyünüz: <b>${finalPortfoy.toFixed(2)} TL</b></p>`;
             return;
         }
-        document.getElementById("txt-hisse").value = 0; document.getElementById("txt-altin").value = 0; ekranıGuncelle();
+        
+        // Giriş kutularını temizle
+        document.getElementById("txt-hisse").value = 0; 
+        document.getElementById("txt-altin").value = 0; 
+        document.getElementById("txt-gumus").value = 0; 
+        document.getElementById("txt-dolar").value = 0; 
+        
+        ekraniGuncelle();
     }
 </script>
 </body>
