@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FinLitSim - Finansal Okuryazarlık Simülasyonu</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f7f6;
+            color: #333;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+        }
+        .container {
+            max-width: 600px;
+            width: 100%;
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        }
+        h1 { color: #2c3e50; text-align: center; margin-bottom: 5px; }
+        .subtitle { text-align: center; color: #7f8c8d; font-size: 0.9em; margin-bottom: 25px; }
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 20px;
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+        }
+        .stat-box { font-weight: bold; }
+        .stat-val { color: #2980b9; }
+        .market-news {
+            background: #fff3cd;
+            border-left: 5px solid #ffc107;
+            padding: 12px;
+            margin-bottom: 20px;
+            border-radius: 4px;
+            font-size: 0.95em;
+        }
+        .input-group {
+            margin-bottom: 15px;
+        }
+        label { display: block; margin-bottom: 5px; font-weight: 600; font-size: 0.9em; }
+        input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            box-sizing: border-box;
+        }
+        button {
+            width: 100%;
+            padding: 12px;
+            background-color: #2ecc71;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        button:hover { background-color: #27ae60; }
+        .log-area {
+            margin-top: 20px;
+            background: #2c3e50;
+            color: #ecf0f1;
+            padding: 15px;
+            border-radius: 8px;
+            height: 150px;
+            overflow-y: auto;
+            font-family: monospace;
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>📊 FinLitSim</h1>
+    <div class="subtitle">Finansal Okuryazarlık ve Portföy Yönetimi Simülasyonu</div>
+    
+    <div class="stats-grid">
+        <div class="stat-box">Yıl: <span id="lbl-yil" class="stat-val">1/5</span></div>
+        <div class="stat-box">Enflasyon: <span id="lbl-enflasyon" class="stat-val">%15</span></div>
+        <div class="stat-box">Nakit: <span id="lbl-nakit" class="stat-val">10000 TL</span></div>
+        <div class="stat-box">Hisse Senedi: <span id="lbl-hisse" class="stat-val">0 TL</span></div>
+        <div class="stat-box">Altın: <span id="lbl-altin" class="stat-val">0 TL</span></div>
+        <div class="stat-box">Toplam Portföy: <span id="lbl-toplam" class="stat-val" style="color:#27ae60;">10000 TL</span></div>
+    </div>
+
+    <div id="market-news" class="market-news">
+        📰 <b>Piyasa Raporu:</b> Simülasyon başladı. Paranı enflasyona karşı korumak için yatırımlarını dağıt!
+    </div>
+
+    <div id="game-controls">
+        <div class="input-group">
+            <label for="txt-hisse">Hisse Senedine Yatırılacak Miktar (TL):</label>
+            <input type="number" id="txt-hisse" value="0" min="0">
+        </div>
+        <div class="input-group">
+            <label for="txt-altin">Altına Yatırılacak Miktar (TL):</label>
+            <input type="number" id="txt-altin" value="0" min="0">
+        </div>
+        <button onclick="turuIlerlet()">Yılı Tamamla ve Yatırım Yap</button>
+    </div>
+
+    <div class="log-area" id="log-area">
+        [Sistem] Simülasyon başlatıldı. Başarılar!
+    </div>
+</div>
+
+<script>
+    let oyun = {
+        tur: 1,
+        toplamTur: 5,
+        nakit: 10000.0,
+        hisse: 0.0,
+        altin: 0.0,
+        enflasyon: 0.15
+    };
+
+    function logEkle(mesaj) {
+        let logArea = document.getElementById("log-area");
+        logArea.innerHTML += "<br>" + mesaj;
+        logArea.scrollTop = logArea.scrollHeight;
+    }
+
+    function ekranıGuncelle() {
+        document.getElementById("lbl-yil").innerText = `${oyun.tur}/5`;
+        document.getElementById("lbl-enflasyon").innerText = `%${(oyun.enflasyon * 100).toFixed(1)}`;
+        document.getElementById("lbl-nakit").innerText = `${oyun.nakit.toFixed(2)} TL`;
+        document.getElementById("lbl-hisse").innerText = `${oyun.hisse.toFixed(2)} TL`;
+        document.getElementById("lbl-altin").innerText = `${oyun.altin.toFixed(2)} TL`;
+        
+        let toplam = oyun.nakit + oyun.hisse + oyun.altin;
+        document.getElementById("lbl-toplam").innerText = `${toplam.toFixed(2)} TL`;
+    }
+
+    function turuIlerlet() {
+        let hisseTalep = parseFloat(document.getElementById("txt-hisse").value) || 0;
+        let altinTalep = parseFloat(document.getElementById("txt-altin").value) || 0;
+
+        if (hisseTalep + altinTalep > oyun.nakit) {
+            alert("❌ Hata: Yetersiz nakit paraya sahipsiniz!");
+            return;
+        }
+
+        // Yatırımları gerçekleştir
+        oyun.nakit -= (hisseTalep + altinTalep);
+        oyun.hisse += hisseTalep;
+        oyun.altin += altinTalep;
+
+        // Enflasyon nakiti eritir
+        let eriyenNakit = oyun.nakit * oyun.enflasyon;
+        oyun.nakit -= eriyenNakit;
+        logEkle(`⚠️ Enflasyon nakitinizden ${eriyenNakit.toFixed(2)} TL eritti.`);
+
+        // Ekonomik senaryolar
+        let senaryolar = [
+            {ad: "Ekonomik Büyüme Dönemi", hisse: 0.25, altin: -0.05, enflasyon: -0.02},
+            {ad: "Küresel Kriz ve Resesyon", hisse: -0.30, altin: 0.20, enflasyon: 0.05},
+            {ad: "Stabil Piyasa", hisse: 0.08, altin: 0.05, enflasyon: 0.01}
+        ];
+        let secilen = senaryolar[Math.floor(Math.random() * senaryolar.length)];
+        
+        document.getElementById("market-news").innerHTML = `📰 <b>Gelişme:</b> ${secilen.ad} yaşanıyor!`;
+
+        // Varlık değişimleri
+        if (oyun.hisse > 0) {
+            let d = oyun.hisse * secilen.hisse;
+            oyun.hisse += d;
+            logEkle(`📈 Hisse senetleriniz ${d >= 0 ? '+' : ''}${d.toFixed(2)} TL değişti.`);
+        }
+        if (oyun.altin > 0) {
+            let d = oyun.altin * secilen.altin;
+            oyun.altin += d;
+            logEkle(`👑 Altınlarınız ${d >= 0 ? '+' : ''}${d.toFixed(2)} TL değişti.`);
+        }
+
+        oyun.enflasyon = Math.max(0.05, oyun.enflasyon + secilen.enflasyon);
+        oyun.tur++;
+
+        if (oyun.tur > oyun.toplamTur) {
+            ekranıGuncelle();
+            let toplamFinal = oyun.nakit + oyun.hisse + oyun.altin;
+            document.getElementById("game-controls").innerHTML = `<h3>Oyun Bitti!</h3> <p>Final Portföy Değeri: <b>${toplamFinal.toFixed(2)} TL</b></p>`;
+            if (toplamFinal > 10000) {
+                logEkle("🎉 Tebrikler! Paranızı enflasyona karşı korudunuz.");
+            } else {
+                logEkle("📉 Maalesef portföyünüz enflasyonun gerisinde kaldı.");
+            }
+            return;
+        }
+
+        // Inputları sıfırla ve ekranı güncelle
+        document.getElementById("txt-hisse").value = 0;
+        document.getElementById("txt-altin").value = 0;
+        ekranıGuncelle();
+    }
+</script>
+</body>
+</html>
