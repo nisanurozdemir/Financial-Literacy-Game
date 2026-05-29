@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FinLitSim Pro - AI Danışman Entegrasyonu</title>
+    <title>FinLitSim Pro - Strateji Analiz Entegrasyonu</title>
     <style>
         :root {
             --bg-color: #0f172a;
@@ -66,9 +66,9 @@
         .stat-val { color: var(--text-color); font-weight: 600; }
         .stat-total { grid-column: span 2; border-bottom: none; padding-top: 10px; font-size: 1.2em; font-weight: bold;}
         
-        .market-news { background: rgba(245, 158, 11, 0.1); border-left: 4px solid var(--accent-gold); padding: 15px; margin-bottom: 15px; border-radius: 6px; font-size: 0.95em; color: #fef08a; }
+        /* Yeni İdeal Strateji Kutusu */
+        .ideal-strategy { background: rgba(16, 185, 129, 0.1); border-left: 4px solid var(--accent-green); padding: 15px; margin-bottom: 15px; border-radius: 6px; font-size: 0.95em; color: #a7f3d0; }
         
-        /* AI Tavsiye Kutusu */
         .ai-advisor { background: rgba(59, 130, 246, 0.1); border-left: 4px solid var(--accent-blue); padding: 15px; margin-bottom: 20px; border-radius: 6px; font-size: 0.95em; color: #93c5fd; }
 
         .investment-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px; }
@@ -104,10 +104,9 @@
         <div class="stat-box stat-total">Toplam Portföy Değeri: <span id="lbl-toplam" style="color: var(--accent-green);">10000 TL</span></div>
     </div>
     
-    <div id="market-news" class="market-news">📰 <b>Makroekonomik Özet:</b> Simülasyon başladı. AI Danışmanınız ilk ay piyasasını analiz ediyor...</div>
+    <div id="ideal-strategy" class="ideal-strategy">🎯 <b>Bu Ayın İdeal Stratejisi:</b> İlk ay piyasa verileri toplanıyor. Hamlenizi yaptıktan sonra bu ay en mantıklı yatırımın hangisi olduğunu burada göreceksiniz.</div>
     
-    <!-- AI Danışman Paneli -->
-    <div id="ai-advisor" class="ai-advisor">🤖 <b>AI Portföy Danışmanı:</b> Hoş geldiniz! İlk ay için piyasa durumunu inceleyin. Faiz artırımları kapıdaysa dolar güçlenebilir, kriz kapıdaysa altına yönelmek güvenli liman stratejisidir.</div>
+    <div id="ai-advisor" class="ai-advisor">🤖 <b>AI Portföy Danışmanı:</b> Hoş geldiniz! Faiz kararları ve jeopolitik riskleri göz önünde bulundurarak portföyünüzü dağıtın. Unutmayın, tek bir enstrümana tüm parayı yatırmak riski artırır.</div>
     
     <div id="game-controls">
         <div class="investment-grid">
@@ -125,12 +124,11 @@
 <script>
     let oyun = { ay: 1, toplamAy: 12, nakit: 10000.0, hisse: 0.0, altin: 0.0, gumus: 0.0, dolar: 0.0, enflasyon: 0.015 };
     
-    // Gelecek ayın ne olacağını önceden belirleyelim ki AI doğru tahmin yapsın
     let senaryolar = [
-        {id: "kriz", ad:"Jeopolitik Gerilim Tırmandı (Savaş Riski)", h:-0.15, a:0.12, g:0.08, d:0.05, e:0.008, ipucu: "Piyasalarda korku hakim. Güvenli liman varlıkları (Altın, Gümüş) ve Dolar bu dönemlerde koruma sağlar. Hisse senetlerinden uzak durulmalı."},
-        {id: "faiz", ad:"Merkez Bankası Faiz Artırım Kararı Aldı", h:-0.08, a:-0.04, g:-0.05, d:0.04, e:-0.002, ipucu: "Faiz artışı nakit ve doları güçlendirir, altın ve borsayı baskılar. Dolar tutmak veya nakitte kalmak mantıklı olabilir."},
-        {id: "buyume", ad:"Küresel Teşvik Paketi Açıklandı (Büyüme)", h:0.15, a:0.02, g:0.04, d:-0.02, e:0.005, ipucu: "Ekonomi canlanıyor! Şirket karları artacak. Parayı borsaya (Hisse Senedi) yatırmak en yüksek getiriyi getirebilir."},
-        {id: "emtia", ad:"Emtia Rallisi Başladı (Endüstriyel Talep)", h:0.03, a:0.08, g:0.16, d:0.01, e:0.003, ipucu: "Gümüş ve Altın fiyatlarında patlama bekleniyor. Özellikle Gümüş endüstriyel talep nedeniyle çok avantajlı."}
+        {id: "kriz", ad:"Jeopolitik Gerilim Tırmandı (Savaş Riski)", h:-0.15, a:0.12, g:0.08, d:0.05, e:0.008, ipucu: "Piyasalarda korku hakim. Güvenli liman varlıkları (Altın, Gümüş) ve Dolar bu dönemlerde koruma sağlar. Hisse senetlerinden uzak durulmalı.", ideal: "Bu ay piyasada kriz yaşandı! En mantıklı hamle, paranızın büyük kısmını güvenli liman olan <b>Altın veya Gümüşe</b> yatırmak ya da Dolar alarak küresel risklerden korunmaktı."},
+        {id: "faiz", ad:"Merkez Bankası Faiz Artırım Kararı Aldı", h:-0.08, a:-0.04, g:-0.05, d:0.04, e:-0.002, ipucu: "Faiz artışı nakit ve doları güçlendirir, altın ve borsayı baskılar. Dolar tutmak veya nakitte kalmak mantıklı olabilir.", ideal: "Bu ay faiz artış dönemiydi! Faizler yükselirken emtialar ve borsa değer kaybeder. En rasyonel karar <b>Dolar pozisyonu almak</b> veya paranızı nakitte tutarak yüksek faiz korumasından yararlanmaktı."},
+        {id: "buyume", ad:"Küresel Teşvik Paketi Açıklandı (Ekonomik Büyüme)", h:0.15, a:0.02, g:0.04, d:-0.02, e:0.005, ipucu: "Ekonomi canlanıyor! Şirket karları artacak. Parayı borsaya (Hisse Senedi) yatırmak en yüksek getiriyi getirebilir.", ideal: "Bu ay piyasada büyüme rallisi vardı! Ekonomik genişleme dönemlerinde şirketlerin değeri katlanır. En mantıklı ve yüksek getirili hamle paranızı <b>Hisse Senetlerine</b> yatırmaktı."},
+        {id: "emtia", ad:"Emtia Rallisi Başladı (Endüstriyel Talep)", h:0.03, a:0.08, g:0.16, d:0.01, e:0.003, ipucu: "Gümüş ve Altın fiyatlarında patlama bekleniyor. Özellikle Gümüş endüstriyel talep nedeniyle çok avantajlı.", ideal: "Bu ay endüstriyel hammadde ve emtia ayıydı! Özellikle sanayi talebiyle coşan <b>Gümüş🥈</b> bu ayın açık ara en çok kazandıranı oldu. Portföyü kıymetli metallere dağıtmak harika sonuç verdi."}
     ];
     
     let mevcutSenaryo = senaryolar[Math.floor(Math.random() * senaryolar.length)];
@@ -163,46 +161,34 @@
         document.getElementById("lbl-toplam").innerText = `${toplam.toFixed(2)} TL`;
     }
 
-    // AI'ın kullanıcının yaptığı hamleyi değerlendirmesi
     function hamleyiAnalizEt(h, a, g, d, senaryo) {
         let tavsiye = "🤖 <b>AI Analizi:</b> ";
         let toplamYatirim = h + a + g + d;
         
         if (toplamYatirim === 0) {
-            return tavsiye + "Tüm paranızı nakitte bıraktınız. Yüksek enflasyon ortamında nakit tutmak paranızı eritir, acilen çeşitlendirme yapmalısınız!";
+            return tavsiye + "Tüm paranızı nakitte bıraktınız. Enflasyon paranızı eritiyor, acilen çeşitlendirme yapmalısınız!";
         }
 
         if (senaryo.id === "kriz") {
-            if (a + g + d > toplamYatirim * 0.6) {
-                return tavsiye + "Harika hamle! Savaş ve kriz beklentisinde altına ve dolara geçerek portföyünüzü mükemmel korudunuz. Tam bir risk yöneticisi!";
-            } else if (h > toplamYatirim * 0.4) {
-                return tavsiye + "⚠️ Riskli Karar! Kriz kapıdayken borsaya büyük yatırım yaptınız. Borsalar bu dönemde çöker, paranızı acilen Altın veya Dolar ile korumalısınız.";
-            }
+            if (a + g + d > toplamYatirim * 0.6) return tavsiye + "Harika hamle! Kriz beklentisinde doğru varlıklara (Altın/Dolar) sığındınız.";
+            if (h > toplamYatirim * 0.4) return tavsiye + "⚠️ Riskli Karar! Kriz ortamında borsaya büyük yatırım yaptınız, bu ay kayıplar kaçınılmaz olabilir.";
         }
         
         if (senaryo.id === "faiz") {
-            if (d > toplamYatirim * 0.5 || oyun.nakit > toplamYatirim) {
-                return tavsiye + "Doğru strateji! Faiz artarken Dolar ve nakit güçlenir. Altın ve hissedeki kayıplardan kaçındınız.";
-            } else if (a + h > toplamYatirim * 0.5) {
-                return tavsiye + "⚠️ Yanlış Tercih! Faizlerin artacağı dönemde altın ve borsa baskılanır. Parayı nakit/dolar dengesinde tutmak daha mantıklıydı.";
-            }
+            if (d > toplamYatirim * 0.5 || oyun.nakit > toplamYatirim) return tavsiye + "Doğru strateji! Faiz artarken Dolar ve nakit dengesini iyi kurdunuz.";
+            if (a + h > toplamYatirim * 0.5) return tavsiye + "⚠️ Yanlış Tercih! Faiz artışlarında altın ve borsa genellikle baskı yer.";
         }
 
         if (senaryo.id === "buyume") {
-            if (h > toplamYatirim * 0.5) {
-                return tavsiye + "🎯 Muazzam İsabet! Ekonomik büyüme dönemlerinde en çok kazandıran varlık Hisse Senetleridir. Tam zamanında borsaya girdiniz.";
-            } else {
-                return tavsiye + "💡 Fırsat Kaçtı: Piyasalar büyürken altın veya dolarda sabit kalmayı seçtiniz. Bu dönemde borsa çok daha agresif kazandırabilirdi.";
-            }
+            if (h > toplamYatirim * 0.5) return tavsiye + "🎯 Muazzam İsabet! Ekonomik büyüme döneminin şampiyonu olan borsaya tam zamanında girdiniz.";
+            return tavsiye + "💡 Fırsat Kaçtı: Piyasalar büyürken sabit getirili varlıklarda kalmayı seçtiniz, borsa çok daha iyi kazandırabilirdi.";
         }
 
         if (senaryo.id === "emtia") {
-            if (g > toplamYatirim * 0.4 || a > toplamYatirim * 0.4) {
-                return tavsiye + "🚀 Tebrikler! Emtia rallisini (Altın/Gümüş) önceden sezip büyük alım yaptınız, özellikle gümüş performansınız harika.";
-            }
+            if (g > toplamYatirim * 0.4 || a > toplamYatirim * 0.4) return tavsiye + "🚀 Müthiş! Emtia rallisini önceden sezip kıymetli metallere ağırlık verdiniz.";
         }
 
-        return tavsiye + "Varlıklarınızı dağıtarak riski böldünüz. Enflasyon karşısında paranızı korumak için fena bir hamle değil, piyasa haberlerini takibe devam edin.";
+        return tavsiye + "Varlıklarınızı dağıtarak riski yönettiniz. Genel piyasa şartları için makul bir hamle.";
     }
 
     function ayiIlerlet() {
@@ -216,7 +202,6 @@
         
         if (h + a + g + d > oyun.nakit) { alert("❌ Yetersiz nakit bütçesi!"); return; }
         
-        // AI Hamle Değerlendirmesini Yap (Değişimler yansımadan önce)
         let aiGeriBildirim = hamleyiAnalizEt(h, a, g, d, mevcutSenaryo);
         
         oyun.nakit -= (h + a + g + d); 
@@ -229,7 +214,8 @@
         oyun.nakit -= erime;
         logEkle(`📉 Enflasyon: Nakitinizden ${erime.toFixed(2)} TL eritti.`);
         
-        document.getElementById("market-news").innerHTML = `📰 <b>Bu Ay Ne Yaşandı?</b> ${mevcutSenaryo.ad}!`;
+        // "Bu ay ne yaşandı" yerine ideal strateji metnini ekrana yazdırıyoruz
+        document.getElementById("ideal-strategy").innerHTML = `🎯 <b>Geride Kalan Ayın İdeal Stratejisi:</b> ${mevcutSenaryo.ideal}`;
         
         if (oyun.hisse > 0) { let kar = oyun.hisse * mevcutSenaryo.h; oyun.hisse += kar; logEkle(`📊 Hisse: ${kar>=0?'+':''}${kar.toFixed(2)} TL`); }
         if (oyun.altin > 0) { let kar = oyun.altin * mevcutSenaryo.a; oyun.altin += kar; logEkle(`🪙 Altın: ${kar>=0?'+':''}${kar.toFixed(2)} TL`); }
@@ -243,13 +229,13 @@
             ekraniGuncelle();
             let finalPortfoy = oyun.nakit + oyun.hisse + oyun.altin + oyun.gumus + oyun.dolar;
             document.getElementById("game-controls").innerHTML = `<h3 style="color:var(--accent-gold); text-align:center;">🏆 Simülasyon Tamamlandı!</h3><p style="text-align:center; font-size:1.1em;">12 Ay Sonundaki Toplam Portföyünüz: <b>${finalPortfoy.toFixed(2)} TL</b></p>`;
-            document.getElementById("ai-advisor").innerHTML = `🤖 <b>AI Final Raporu:</b> Simülasyonu başarıyla bitirdiniz! Portföy yönetimi ve finansal okuryazarlık yeteneklerinizi geliştirmek için bu paneli her zaman kullanabilirsiniz.`;
+            document.getElementById("ai-advisor").innerHTML = `🤖 <b>AI Final Raporu:</b> 12 aylık dönemi tamamladınız. Finansal okuryazarlık ilkelerini ne kadar iyi uyguladığınızı görmek için portföyünüzün son durumunu analiz edin.`;
             return;
         }
         
-        // Bir sonraki ayın senaryosunu rastgele seç ve AI ipucunu güncelle
+        // Gelecek ayın senaryosunu belirle ve AI ipucunu güncelle
         mevcutSenaryo = senaryolar[Math.floor(Math.random() * senaryolar.length)];
-        document.getElementById("ai-advisor").innerHTML = aiGeriBildirim + `<br><br>💡 <b>Gelecek Ay İçin AI İpucu:</b> ${mevcutSenaryo.ipucu}`;
+        document.getElementById("ai-advisor").innerHTML = aiGeriBildirim + `<br><br>💡 <b>Gelecek Ay İçin AI Sinyali:</b> ${mevcutSenaryo.ipucu}`;
         
         document.getElementById("txt-hisse").value = 0; 
         document.getElementById("txt-altin").value = 0; 
