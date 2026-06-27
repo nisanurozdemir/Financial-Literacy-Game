@@ -40,7 +40,7 @@ This project integrates the *System Optimization and Decision Theory* principles
 ---
 
 ## 📝 License
-This project is developed as an open-source tool for educational and personal growth purposes. Feel free to fork, enhance, or use it as a presentation resource for financial literacy workshops.
+This project is developed as an open-source tool for educational and personal growth purposes. Feel free to fork, enhance, or use it as a presentation resource for financial literacy workshops..
 
 **Developer:** Nisanur Özdemir  
 *Industrial Engineering & Management Information Systems Student*
